@@ -21,5 +21,11 @@ remote seadistamine:
 e) git remote add nimi github:address
 git remote add skriptimine git@github.com:kasutajanimi/reponimi.git
 
-f) git remote kontroll
+f) git remote kontroll:
 git remote -v
+
+
+git commitimine ig:
+git add "fail"
+git commit -m "tekst"
+git push
