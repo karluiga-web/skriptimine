@@ -20,3 +20,8 @@ b) skriptimise nädalapäevad
 cal - panna lõppu lwk
 
 skript: date "+%A, %d. %B %Y, %H:%M:%S"
+
+c) tavalised commandid
+
+Tree -f
+#echo "alias tekst='cat ~/skriptimine/Info/abi'" >> ~/.bashrc
