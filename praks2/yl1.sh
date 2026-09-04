@@ -1,6 +1,5 @@
 
 #!/bin/bash
-# Skript väljastab tervituse koos sisselogitud kasutaja nimega
 
 echo -n "Tere, "
 kasutaja=$(whoami)
