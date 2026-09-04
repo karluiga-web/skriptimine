@@ -1,0 +1,22 @@
+Abiks asjad:
+
+
+a) Git Commit:
+
+git add "fail"
+git commit -m "teks"
+git push
+
+
+b) skriptimise nädalapäevad
+
+%A - Nädlapäev (nt Esmaspäev)
+%d - Kuupäev (01 kuni 31)
+%B - Kuu (nt August)
+%Y - Aasta (nt 2026)
+%H - tunnid
+%M - minutid
+%S - sekundid
+cal - panna lõppu lwk
+
+skript: date "+%A, %d. %B %Y, %H:%M:%S"
