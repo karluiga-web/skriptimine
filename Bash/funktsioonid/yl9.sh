@@ -1,0 +1,13 @@
+#!/bin/bash
+
+liida() {
+    if [ $# -ne 2 ]; then
+        echo "Viga: sisesta kaks arvu!"
+        return 1
+    fi
+
+    echo "$(($1 + $2))"
+}
+
+liida 10 20
+liida 5
