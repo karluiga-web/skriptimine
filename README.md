@@ -1,4 +1,4 @@
-# GitHowTo õpipraktika ja töövoog
+# GitHowTo õpipraktika ja töö
 
 Selle projekti eesmärk on dokumenteerida GitHowTo harjutuste käigus omandatud teadmised ja oskused versioonihaldussüsteemi Git kasutamisel.
 
