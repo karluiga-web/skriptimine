@@ -71,6 +71,6 @@ Probleem 6
 
 Uus funktsionaalsus
 
-- Mida lisasin: Vaba RAM-mälu kuvamine skriptis scripts/system_info.sh.
+- Mida lisasin: Masina kohaliku IP-aadressi kuvamine skriptis scripts/system_info.sh.
 - Kuidas käivitada: bash scripts/system_info.sh
-- Kuidas kontrollisin, et tulemus on õige: Võrdlesin väljundit käsu free -m tulemusega.
+- Kuidas kontrollisin, et tulemus on õige: Võrdlesin väljundit käskudega ip a ja hostname -I.
