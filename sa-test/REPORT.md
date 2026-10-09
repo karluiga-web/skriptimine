@@ -71,6 +71,6 @@ Probleem 6
 
 Uus funktsionaalsus
 
-- Mida lisasin: Masina kohaliku IP-aadressi kuvamine skriptis scripts/system_info.sh.
-- Kuidas käivitada: bash scripts/system_info.sh
-- Kuidas kontrollisin, et tulemus on õige: Võrdlesin väljundit käskudega ip a ja hostname -I.
+- Mida lisasin: Kustutab vanemad kui 7päeva vanasid backupfaile skriptis scripts/backup_clean.sh.
+- Kuidas käivitada: bash ./backup_clean.sh.
+- Kuidas kontrollisin, et tulemus on õige: Seda saab alles realselt kontrollida pärast seitsmentat päeva aga hetkel ütleb, et pole ühtegi vanemat kui 7päeva. Seda saab vahetada reas kus on  DAYS=${1:-7}, et peab vahetama aind 7 ära.
