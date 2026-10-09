@@ -8,6 +8,11 @@ ARCHIVE="$BACKUP_DIR/backup_$DATE.tar.gz"
 
 mkdir -p "$BACKUP_DIR"
 
+if [ ! -d "$BACKUP_SOURCE" ]; then
+    echo "Varukoopia ebaõnnestus: lähtekausta ei leitud ($BACKUP_SOURCE)." >&2
+    exit 1
+fi
+
 echo "Varukoopia loomine..."
 
 tar -czf "$ARCHIVE" -C "$BACKUP_SOURCE" . 2>/dev/null
