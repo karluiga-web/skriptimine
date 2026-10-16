@@ -1,0 +1,46 @@
+#!/bin/bash
+# Ülesanne 3 - Kasutajad paroolidega failist
+
+# Kontrollime parameetrite arvu
+if [ $# -ne 1 ]; then
+    echo "Kasutusjuhend: $0 failinimi"
+    exit 1
+fi
+
+fail="$1"
+
+# Kontrollime faili olemasolu
+if [ ! -f "$fail" ]; then
+    echo "Viga: Faili '$fail' ei leitud!"
+    exit 1
+fi
+
+# Loeme faili rida-realt (formaat kasutajanimi:parool)
+while IFS= read -r rida || [ -n "$rida" ]; do
+    rida=$(echo "$rida" | tr -d '\r' | xargs)
+    [ -z "$rida" ] && continue
+
+    kasutajanimi=$(echo "$rida" | cut -d: -f1)
+    parool=$(echo "$rida" | cut -d: -f2)
+
+    # Kontrollime, kas kasutaja on olemas; kui mitte, loome kasutaja
+    if ! id "$kasutajanimi" &>/dev/null; then
+        useradd -m -s /bin/bash "$kasutajanimi"
+        if [ $? -eq 0 ]; then
+            echo "Kasutaja '$kasutajanimi' loodud."
+        else
+            echo "Viga: Kasutaja '$kasutajanimi' loomine ebaõnnestus!"
+            continue
+        fi
+    else
+        echo "Kasutaja '$kasutajanimi' on juba olemas."
+    fi
+
+    # Määrame kasutajale parooli
+    echo "$kasutajanimi:$parool" | chpasswd
+    if [ $? -eq 0 ]; then
+        echo "Kasutajale '$kasutajanimi' määratud parool."
+    else
+        echo "Viga: Kasutajale '$kasutajanimi' parooli määramine ebaõnnestus!"
+    fi
+done < "$fail"
