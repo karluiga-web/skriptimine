@@ -1,0 +1,53 @@
+#!/bin/bash
+# Ülesanne 4 - Kasutajad ja paroolid on eraldatud
+
+# Kontrollime parameetrite arvu
+if [ $# -ne 2 ]; then
+    echo "Kasutusjuhend: $0 kasutajate_fail paroolide_fail"
+    exit 1
+fi
+
+kasutajad_fail="$1"
+paroolid_fail="$2"
+
+# Kontrollime failide olemasolu
+if [ ! -f "$kasutajad_fail" ]; then
+    echo "Viga: Kasutajate faili '$kasutajad_fail' ei leitud!"
+    exit 1
+fi
+
+if [ ! -f "$paroolid_fail" ]; then
+    echo "Viga: Paroolide faili '$paroolid_fail' ei leitud!"
+    exit 1
+fi
+
+# Töötleme mõlemat faili rida-realt (kasutades paste käsku)
+paste -d: "$kasutajad_fail" "$paroolid_fail" | while IFS=: read -r kasutajanimi parool || [ -n "$kasutajanimi" ]; do
+    kasutajanimi=$(echo "$kasutajanimi" | tr -d '\r' | xargs)
+    parool=$(echo "$parool" | tr -d '\r' | xargs)
+
+    [ -z "$kasutajanimi" ] && continue
+
+    # Kasutaja loomine kui teda ei eksisteeri
+    if ! id "$kasutajanimi" &>/dev/null; then
+        useradd -m -s /bin/bash "$kasutajanimi"
+        if [ $? -eq 0 ]; then
+            echo "Kasutaja '$kasutajanimi' loodud."
+        else
+            echo "Viga: Kasutaja '$kasutajanimi' loomine ebaõnnestus!"
+            continue
+        fi
+    else
+        echo "Kasutaja '$kasutajanimi' on juba olemas."
+    fi
+
+    # Parooli määramine
+    if [ -n "$parool" ]; then
+        echo "$kasutajanimi:$parool" | chpasswd
+        if [ $? -eq 0 ]; then
+            echo "Kasutajale '$kasutajanimi' määratud parool."
+        else
+            echo "Viga: Kasutajale '$kasutajanimi' parooli määramine ebaõnnestus!"
+        fi
+    fi
+done
