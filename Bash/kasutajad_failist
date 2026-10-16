@@ -1,0 +1,26 @@
+#!/bin/bash
+# Ülesanne 2 - Kasutajad failist
+
+# Kontrollime parameetrite arvu
+if [ $# -ne 1 ]; then
+    echo "Kasutusjuhend: $0 failinimi"
+    exit 1
+fi
+
+fail="$1"
+
+# Kontrollime faili olemasolu
+if [ ! -f "$fail" ]; then
+    echo "Viga: Faili '$fail' ei leitud!"
+    exit 1
+fi
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# Loeme faili rida-realt (kaasa arvatud juhul, kui viimasel real puudub reavahetus)
+while IFS= read -r kasutajanimi || [ -n "$kasutajanimi" ]; do
+    kasutajanimi=$(echo "$kasutajanimi" | tr -d '\r' | xargs)
+    [ -z "$kasutajanimi" ] && continue
+
+    sh "$SCRIPT_DIR/lisa_kasutaja" "$kasutajanimi"
+done < "$fail"
