@@ -1,5 +1,16 @@
 #!/bin/bash
-# Ülesanne 5 - Kasutajate loomine paroolide genereerimise ja logimisega
+# Ülesanne 5 & 6 - Kasutajate loomine paroolide genereerimise ja root kontrolliga
+
+# Ülesanne 6: Kontroll, et käivitaja on root ja mitte sudo kaudu
+if [ -n "$SUDO_USER" ]; then
+    echo "Viga: Skripti käivitamine sudo kaudu on keelatud! Käivita otse root kasutajana."
+    exit 1
+fi
+
+if [ "$EUID" -ne 0 ] || [ "$(whoami)" != "root" ]; then
+    echo "Viga: Skripti tohib käivitada ainult root kasutaja!"
+    exit 1
+fi
 
 # Kontrollime parameetrite arvu
 if [ $# -ne 1 ]; then
