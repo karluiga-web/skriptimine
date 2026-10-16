@@ -1,0 +1,63 @@
+#!/bin/bash
+# Ülesanne 5 - Kasutajate loomine paroolide genereerimise ja logimisega
+
+# Kontrollime parameetrite arvu
+if [ $# -ne 1 ]; then
+    echo "Kasutusjuhend: $0 kasutajate_fail"
+    exit 1
+fi
+
+fail="$1"
+
+# Kontrollime faili olemasolu
+if [ ! -f "$fail" ]; then
+    echo "Viga: Faili '$fail' ei leitud!"
+    exit 1
+fi
+
+# Kontrollime, kas pwgen on süsteemis olemas, vajadusel paigaldame
+if ! command -v pwgen &>/dev/null; then
+    echo "pwgen käsku ei leitud süsteemist. Proovin paigaldada..."
+    apt-get update -y && apt-get install -y pwgen 2>/dev/null
+fi
+
+logifail="loodud_kasutajad_paroolidega"
+# Tühjendame / initsialiseerime logifaili või lisame sinna
+touch "$logifail"
+
+while IFS= read -r kasutajanimi || [ -n "$kasutajanimi" ]; do
+    kasutajanimi=$(echo "$kasutajanimi" | tr -d '\r' | xargs)
+    [ -z "$kasutajanimi" ] && continue
+
+    # Kasutaja loomine kui teda veel pole
+    if ! id "$kasutajanimi" &>/dev/null; then
+        useradd -m -s /bin/bash "$kasutajanimi"
+        if [ $? -eq 0 ]; then
+            echo "Kasutaja '$kasutajanimi' loodud."
+        else
+            echo "Viga: Kasutaja '$kasutajanimi' loomine ebaõnnestus!"
+            continue
+        fi
+    else
+        echo "Kasutaja '$kasutajanimi' on juba olemas."
+    fi
+
+    # Genereerime 8-sümbolilise parooli (tähtedest ja numbritest)
+    if command -v pwgen &>/dev/null; then
+        parool=$(pwgen -s 8 1)
+    else
+        parool=$(tr -dc 'a-zA-Z0-9' < /dev/urandom | head -c 8)
+    fi
+
+    # Määrame parooli kasutajale
+    echo "$kasutajanimi:$parool" | chpasswd
+    if [ $? -eq 0 ]; then
+        echo "Kasutajale '$kasutajanimi' genereeritud parool ja määratud süsteemis."
+        # Salvestame logifaili kujul kasutajanimi:parool
+        echo "$kasutajanimi:$parool" >> "$logifail"
+    else
+        echo "Viga: Parooli määramine kasutajale '$kasutajanimi' ebaõnnestus!"
+    fi
+done < "$fail"
+
+echo "Töö lõpetatud. Genereeritud paroolid salvestati faili: $logifail"
