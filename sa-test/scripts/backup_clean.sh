@@ -3,7 +3,7 @@
 BASE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 source "$BASE_DIR/config/settings.conf"
 
-DAYS=${1:-7}
+DAYS=${1:-7} #Salvestab päevade arvu muutujasse DAYS. Kui skripti käivitamisel argumenti ei antud, on päevade arvuks 7.
 
 if [ ! -d "$BACKUP_DIR" ]; then
     echo "Varukoopiate kausta ei leitud ($BACKUP_DIR)." >&2

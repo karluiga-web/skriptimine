@@ -19,7 +19,9 @@ tar -czf "$ARCHIVE" -C "$BACKUP_SOURCE" . 2>/dev/null
 
 if [ -s "$ARCHIVE" ]; then
     echo "Varukoopia valmis: $ARCHIVE"
-    echo "Failide arv: $(tar -tzf "$ARCHIVE" | wc -l)"
+    DIR_COUNT=$(tar -tvf "$ARCHIVE" | grep '^d' | grep -v ' \./$' | wc -l)
+    FILE_COUNT=$(tar -tvf "$ARCHIVE" | grep -v '^d' | wc -l)
+    echo "Kokku: $DIR_COUNT kausta, $FILE_COUNT faili"
     exit 0
 else
     echo "Varukoopia ebaõnnestus."
